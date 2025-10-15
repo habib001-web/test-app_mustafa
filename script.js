@@ -4,14 +4,22 @@ canvas.width = 800;
 canvas.height = 600;
 
 let points = [];
+const gravitationalAcceleration = 9.8; // m/s²
+const totalPoints = 50;
+let randomPoints = [];
+
+// Initialize random points
+for (let i = 0; i < totalPoints; i++) {
+    randomPoints.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height });
+}
 
 canvas.addEventListener('click', (event) => {
     const rect = canvas.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
-    
+
     points.push({ x, y });
-    
+
     if (points.length === 2) {
         drawLine(points[0], points[1]);
         points = []; // Reset points after drawing
@@ -21,6 +29,7 @@ canvas.addEventListener('click', (event) => {
 document.getElementById('reset').addEventListener('click', () => {
     context.clearRect(0, 0, canvas.width, canvas.height);
     points = [];
+    resetRandomPoints();
 });
 
 function drawLine(p1, p2) {
@@ -41,6 +50,8 @@ function drawLine(p1, p2) {
     });
     context.strokeStyle = 'red';
     context.stroke();
+
+    drawGravityEffect();
 }
 
 function interpolate(p1, p2, steps) {
@@ -53,4 +64,32 @@ function interpolate(p1, p2, steps) {
         });
     }
     return points;
+}
+
+function drawGravityEffect() {
+    randomPoints.forEach(point => {
+        const thrust = calculateThrust(point);
+        point.y += thrust; // Update y position based on thrust
+        point.y = Math.min(point.y, canvas.height); // Prevent going below the canvas
+        drawPoint(point);
+    });
+}
+
+function calculateThrust(point) {
+    // Higher y values generate lower thrust
+    return gravitationalAcceleration * (1 - (point.y / canvas.height));
+}
+
+function drawPoint(point) {
+    context.fillStyle = 'blue';
+    context.beginPath();
+    context.arc(point.x, point.y, 5, 0, Math.PI * 2);
+    context.fill();
+}
+
+function resetRandomPoints() {
+    randomPoints = [];
+    for (let i = 0; i < totalPoints; i++) {
+        randomPoints.push({ x: Math.random() * canvas.width, y: 0 }); // Reset to the top of the canvas
+    }
 }
