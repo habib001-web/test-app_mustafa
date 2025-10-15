@@ -8,7 +8,7 @@ This web application allows users to input two mouse coordinates by clicking on 
 - Interpolation of points between two selected coordinates
 - Visual representation of the line connecting the points
 - Reset button to clear the canvas
-- Dynamic graph showing the movements of random points under the effect of gravity
+- Dynamic graph showing the movements of 50 random points under the effect of gravity, with thrust calculated based on their vertical position
 
 ## Setup Instructions
 1. Clone the repository or download the files.
