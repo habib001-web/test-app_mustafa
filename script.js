@@ -10,7 +10,7 @@ let randomPoints = [];
 
 // Initialize random points
 for (let i = 0; i < totalPoints; i++) {
-    randomPoints.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height });
+    randomPoints.push({ x: Math.random() * canvas.width, y: 0 }); // Start at the top
 }
 
 canvas.addEventListener('click', (event) => {
@@ -76,8 +76,7 @@ function drawGravityEffect() {
 }
 
 function calculateThrust(point) {
-    // Higher y values generate lower thrust
-    return gravitationalAcceleration * (1 - (point.y / canvas.height));
+    return gravitationalAcceleration * (1 - (point.y / canvas.height)); // Adjust thrust based on y position
 }
 
 function drawPoint(point) {
